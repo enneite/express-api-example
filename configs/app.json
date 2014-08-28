@@ -1,0 +1,23 @@
+{
+    "application" : {
+        "port" : 8081,
+
+        "view" : {
+            "engine" : "ejs",
+            "path" : "/views"
+        },
+        "custom" :{
+
+        }
+    },
+    "static_dir" : "/public",
+    "route" : {
+        "path" : "/routes"
+    },
+    "db" : {
+        "mongodb" : {
+            "host"   : "localhost",
+            "dbname" : "test"
+        }
+    }
+}
