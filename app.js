@@ -5,18 +5,21 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
-var initDb = require('./init/db');
-var initRoutes = require('./init/routes');
+// new requirements for this application :
 var engine = require('ejs-locals');
+var bootloader = require('express-bootloader');
+// locals modules :
+var initRoutes = require('./init/routes');
 
 var app = express();
 
 // view engine setup
-// use ejs-locals for all ejs templates:
+// use ejs-locals for all ejs templates : it's better to integrate layout in template architecture
 app.engine('ejs', engine);
-app.set('views',__dirname + '/views');
-app.set('view engine', 'ejs'); // so you can render('index')
+
+bootloader.init(app, __dirname);
+
+
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -26,7 +29,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 initRoutes.init(app);
-initDb.init(app);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

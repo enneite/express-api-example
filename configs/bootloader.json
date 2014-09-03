@@ -1,0 +1,14 @@
+{
+    "bootloader" :{
+    	"db" : {
+	        "mongodb" : {
+	            "uri" : "mongodb://localhost/test"
+	        }
+	    },
+		"settings" : {
+			"port" : 3000,
+			"views" : "views",
+			"view engine" : "ejs"
+		}
+    }    
+}
