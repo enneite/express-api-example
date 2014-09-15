@@ -7,7 +7,7 @@ var userSchema = new Schema({
     username: {type: String, required: true},
     pwd: {type: String, required: true},
     birthday: {type: Date, required: false},
-    status: {type: String, default:'waiting'}
+    status: {type: String, default:'WAITING'}
 });
 
 module.exports = exports = mongoose.model('User', userSchema);
