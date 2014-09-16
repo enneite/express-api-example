@@ -12,7 +12,7 @@ InitRoutes.prototype.init = function (app) {
 
     // middleware on users route :
     app.use('/users', function(req, res, next){
-        console.log('users/ : %s %s', req.method, req.url);
+        console.log('users/ : %s %s', req.method, req.url, req.body);
         next();
     });
     // routing users :

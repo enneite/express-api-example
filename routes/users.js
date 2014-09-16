@@ -18,4 +18,34 @@ router.get('/', function(req, res) {
 
 });
 
+
+
+
+router.post('/', function(req, res) {
+	var data = req.body;
+	data.birthday = null;
+	
+	
+	var user = new User({
+		username: data.username,
+		pwd: data.pwd,
+		birthday: data.birthday,
+		status: User.getStatusWaiting()
+	});
+	user.cryptPwd();
+	
+	user.save(function(err, user) {
+		if(err) {
+			console.log(err);
+			res.json(500, {error : 'user not created!'})
+		}
+		res.json(user);
+		
+	});
+	
+	 
+	
+	
+});
+
 module.exports = router;
