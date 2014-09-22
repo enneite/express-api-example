@@ -15,10 +15,15 @@ userSchema.statics.getStatusWaiting = function() {
 	return 'WAITING';
 }
 
-userSchema.methods.cryptPwd = function() {
+var cryptPwd = function(pwd) {
 	var salt = 'UNGRAINDESELCOMMEJELESAIME';
 	var hash = crypto.createHash('sha512');
-	this.pwd = hash.update(this.pwd + salt).digest('base64');;	
+	return  hash.update(pwd + salt).digest('base64');
+}
+userSchema.statics.cryptPwd = cryptPwd;
+
+userSchema.methods.cryptPwd = function() {
+	this.pwd = cryptPwd(this.pwd);	
 }
 
 module.exports = exports = mongoose.model('User', userSchema);
