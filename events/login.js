@@ -1,14 +1,14 @@
+var EventEmitter = require('events').EventEmitter
 var crypto = require('crypto');
 
 var User = require('../models/user');
 var Token = require('../models/token');
 
-var EventEmitter = require('events').EventEmitter
+var AUTH_TIMEOUT = 300;
 
-var AuthenticationService = function() {
-	
-}
-
+/**
+ * private function : generate access_token
+ */
 var createToken = function (username) {
 	var max = 999999999999;
 	var randomInt = Math.floor(Math.random()*max);
@@ -21,10 +21,13 @@ var createToken = function (username) {
 	return  hash.update(stringToHash).digest('hex');
 };
 
+/**
+ * private function : create access_token and persist it in mongodb
+ */
 var createAndPersistToken = function(username) {
 	var access_token = createToken(username);
 	var d = new Date();
-	d.setSeconds(30);
+	d.setSeconds(AUTH_TIMEOUT);
 	var token = new Token({
 		access_token : access_token,
 		expiration   : d,
@@ -36,8 +39,11 @@ var createAndPersistToken = function(username) {
 	return access_token;
 };
 
+var LoginEventsEmitter = function() {
+	
+};
 
-var buildLoginEvents = function(req, res) {
+LoginEventsEmitter.prototype.create = function(req, res) {
 	var loginEventEmitter = new EventEmitter();
 
 	// listen me when when log in pass
@@ -53,9 +59,11 @@ var buildLoginEvents = function(req, res) {
 				console.log(docs);
 				// if access_token doesn't exists create it and persist it in mongodb
 				if(docs.length == 0) {
+					
 					var access_token = createAndPersistToken(req.body.username);
+					console.log('token dos not exist : create new token');
 				}
-				else { // if access_token already existsreturn it 
+				else { // if access_token already exists and not expired return it 
 					var now = new Date();
 					
 					console.log('now:', now);
@@ -64,12 +72,11 @@ var buildLoginEvents = function(req, res) {
 					if(docs[0].expiration > now) {
 						var access_token = docs[0].access_token;
 					}
-					else {
-						// var query = Token.remove({ infos : { username : req.body.username}});
-						// query.exec();
-						var access_token = createAndPersistToken(req.body.username);												
-					}
-					
+					else { // if token expired, return and new token (after remove it)
+						Token.find({ infos : { username : req.body.username}}).remove().exec();
+						var access_token = createAndPersistToken(req.body.username);
+						console.log('token expired : create new token');
+					}					
 				}
 			}
 			res.json(200, {access_token : access_token});
@@ -85,42 +92,4 @@ var buildLoginEvents = function(req, res) {
 	return loginEventEmitter;
 }
 
-AuthenticationService.prototype.login = function (req, res) {
-	
-	// build log in event 
-	loginEventEmitter = buildLoginEvents(req, res);	
-	
-	var data = req.body;	
-	
-	// check request params existence
-	if(data['username'] == undefined || data['pwd'] == undefined) {
-		loginEvent.emit('ko', 'bad request (missing username or password');
-	}
-	else { // request he mongodb database :
-		User.find({username : data.username}, function(err, docs) {
-			if(err) {
-				loginEventEmitter.emit('ko', 'technical error : '+ error.message);	
-			}
-			else {
-				if (docs.length == 0) { // no user found for this username
-					loginEventEmitter.emit('ko', 'no user found for username'+ data.username);					
-				}
-				else if(docs.length > 1) { // to many users found for this user name					
-					loginEventEmitter.emit('ko', 'to many users found for username'+ data.username);
-				}
-				else { // authentication success!
-					var actual = docs[0];
-					var cryptPwd = User.cryptPwd(data.pwd);
-					if(cryptPwd == actual.pwd) {
-						loginEventEmitter.emit('ok');
-					}
-					else {
-						loginEventEmitter.emit('ko', 'check pwd failed, given :'+ data.pwd + ', crypted : '+ cryptPwd, ', excepted :' + actual.pwd);						
-					}					
-				}
-			}
-		});
-	}
-}
-
-var authenticationService = module.exports = exports = new AuthenticationService();
+var loginEventsEmitter = exports = module.exports = new LoginEventsEmitter ();
