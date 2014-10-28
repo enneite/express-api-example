@@ -5,7 +5,7 @@ var mongoose = require('mongoose')
 
 var userSchema = new Schema({
     createdDate: {type: Date, default: Date.now},
-    username: {type: String, required: true, unique: true},
+    username: {type: String, required: true, unique: true, validate : /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/},
     pwd: {type: String, required: true},
     birthday: {type: Date, required: false},
     status: {type: String, default:'WAITING'}
