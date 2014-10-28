@@ -27,10 +27,11 @@ AuthMiddleware.prototype.authentification = function(req, res, next){
         			}
         			else { 
         				
-        				/*var user = new User({
-        					username : doc.infos.username
+        				var user = new User({
+        					username : doc.infos.username,
+        					_id : doc.infos.id
         				});
-        				req.user = user;*/
+        				req.user = user;
         				next();        				
         			}
     		});
