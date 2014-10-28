@@ -2,12 +2,18 @@ var LoginEventEmitter = require('../../events/login');
 var User = require('../../models/user');
 
 /**
- * 
+ * authentification controller 
  */
 var AuthController = function() {
 	
 }
 
+/**
+ * the authentification on an user with username (email) and password  
+ * 
+ * @param req
+ * @param res
+ */
 AuthController.prototype.indexAction = function (req, res) {
 	
 	// build log in event 
@@ -35,7 +41,8 @@ AuthController.prototype.indexAction = function (req, res) {
 					var actual = docs[0];
 					var cryptPwd = User.cryptPwd(data.pwd);
 					if(cryptPwd == actual.pwd) {
-						loginEventEmitter.emit('ok');
+						// emit 'ok' event with user ID in args (for token "session" storage):
+						loginEventEmitter.emit('ok', actual._id);
 					}
 					else {
 						loginEventEmitter.emit('ko', 'check pwd failed, given :'+ data.pwd + ', crypted : '+ cryptPwd, ', excepted :' + actual.pwd);						

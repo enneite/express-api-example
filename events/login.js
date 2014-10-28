@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var User = require('../models/user');
 var Token = require('../models/token');
 
-var AUTH_TIMEOUT = 300;
+var AUTH_TIMEOUT = 100 ; //3600 * 24;
 
 /**
  * private function : generate access_token
@@ -24,7 +24,8 @@ var createToken = function (username) {
 /**
  * private function : create access_token and persist it in mongodb
  */
-var createAndPersistToken = function(username) {
+var createAndPersistToken = function(username, userId) {
+	console.log('user id  (createAndPersistToken)' +userId);
 	var access_token = createToken(username);
 	var d = new Date();
 	d.setSeconds(AUTH_TIMEOUT);
@@ -32,22 +33,34 @@ var createAndPersistToken = function(username) {
 		access_token : access_token,
 		expiration   : d,
 		infos        : {
-			username : username
+			username : username,
+			id : userId
 		}			
 	});
 	token.save();
 	return access_token;
 };
 
+/**
+ * 
+ */
 var LoginEventsEmitter = function() {
 	
 };
 
+/**
+ * create an eventEmitter to listen when authentication append
+ * 
+ * @param req
+ * @param res
+ * @returns {EventEmitter}
+ */
 LoginEventsEmitter.prototype.create = function(req, res) {
 	var loginEventEmitter = new EventEmitter();
 
 	// listen me when when log in pass
-	loginEventEmitter.on('ok', function() {
+	loginEventEmitter.on('ok', function(userId) {
+		console.log('user id  (on())' +userId);
 		// search if access_token already exists (in this case return it!)
 		Token.find({ infos : { username : req.body.username}})
 		     .sort({expiration : -1})
@@ -60,7 +73,7 @@ LoginEventsEmitter.prototype.create = function(req, res) {
 				// if access_token doesn't exists create it and persist it in mongodb
 				if(docs.length == 0) {
 					
-					var access_token = createAndPersistToken(req.body.username);
+					var access_token = createAndPersistToken(req.body.username, userId);
 					console.log('token dos not exist : create new token');
 				}
 				else { // if access_token already exists and not expired return it 
