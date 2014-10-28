@@ -5,7 +5,7 @@ var mongoose = require('mongoose')
 
 var userSchema = new Schema({
     createdDate: {type: Date, default: Date.now},
-    username: {type: String, required: true},
+    username: {type: String, required: true, unique: true},
     pwd: {type: String, required: true},
     birthday: {type: Date, required: false},
     status: {type: String, default:'WAITING'}

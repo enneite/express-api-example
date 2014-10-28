@@ -89,7 +89,13 @@ UserController.prototype.createAction =function(req, res) {
 	user.save(function(err, user) {
 		if(err) {
 			console.log(err);
-			res.json(500, {error : 'user not created!'})
+			
+			var errorMsg = code = 'user not created';
+			if(err.code == 11000) {
+				errorMsg = 'user already exist';
+			}
+			
+			res.json(500, {error : errorMsg})
 		}
 		res.json(user);		
 	});	
