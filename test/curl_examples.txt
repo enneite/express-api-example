@@ -1,0 +1,7 @@
+create user request : 
+
+curl -X POST \
+--data '{ "username" : "pitlejariel@hotmail.com",   "pwd" :"thisissecret"}' \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+http://localhost:8081/users

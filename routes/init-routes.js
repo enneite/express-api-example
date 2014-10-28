@@ -1,8 +1,8 @@
-var index = require('../routes/index');
-var users = require('../routes/users');
-var auth = require('../routes/auth');
+var index = require('./index');
+var users = require('./api/users');
+var auth = require('./api/auth');
 
-var authMiddleware = require('../middlewares/authorization');
+var AuthMiddleware = require('../middlewares/auth-middleware');
 
 var InitRoutes = function() {
 
@@ -19,7 +19,7 @@ InitRoutes.prototype.init = function (app) {
 	 * user routing
 	 */
     // middleware on users route : check authentification ...
-    app.use('/users', authMiddleware.authentification);
+    app.use('/users', AuthMiddleware.authentification);
     
     // routing users :
     app.use('/users', users);

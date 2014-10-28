@@ -1,12 +1,15 @@
-var express = require('express');
-var router = express.Router();
+var User = require('../../models/user');
 
-var User = require('../models/user');
+var UserController = function(){
+	
+}
 
 /**
- * get users list
+ * 
+ * @param req
+ * @param res
  */
-router.get('/', function(req, res) {
+UserController.prototype.listAction = function(req, res) {
   User.find(function(err, users) {
       if(err) {
           console.log(err.message);
@@ -16,13 +19,14 @@ router.get('/', function(req, res) {
           res.json(users);
       }
   });
-
-});
+}
 
 /**
- * get user by id and return some properties as json
+ * 
+ * @param req
+ * @param res
  */
-router.get('/:id', function(req, res) {	
+UserController.prototype.readAction = function(req, res) {	
 	var id = req.params['id'];	
 	User.findById(id , function(err, found) {
 		if(err) {
@@ -37,12 +41,14 @@ router.get('/:id', function(req, res) {
 		};
 		res.json(data)
 	});
-});
+};
 
 /**
- * update an user
+ * 
+ * @param req
+ * @param res
  */
-router.put('/:id', function(req, res) {
+UserController.prototype.updateAction = function(req, res) {
 	var id = req.params['id'];	
 	User.findById(id , function(err, found) {
 		if(err) {
@@ -61,12 +67,14 @@ router.put('/:id', function(req, res) {
 		
 		res.json(found);
 	});
-});
+}
 
 /**
- * create an new user !
+ * 
+ * @param req
+ * @param res
  */
-router.post('/', function(req, res) {	
+UserController.prototype.createAction =function(req, res) {	
 	var data = req.body;
 	data.birthday = null;	
 	var user = new User({
@@ -85,8 +93,8 @@ router.post('/', function(req, res) {
 		}
 		res.json(user);		
 	});	
-});
+}
 
 
+var userController = module.exports = exports = new UserController();
 
-module.exports = router;

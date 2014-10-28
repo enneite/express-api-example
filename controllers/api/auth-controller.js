@@ -1,14 +1,14 @@
-var express = require('express');
-var router = express.Router();
-
-var LoginEventEmitter = require('../events/login');
-
-var User = require('../models/user');
+var LoginEventEmitter = require('../../events/login');
+var User = require('../../models/user');
 
 /**
- * authentication of an user
+ * 
  */
-router.post('/', function (req, res) {
+var AuthController = function() {
+	
+}
+
+AuthController.prototype.indexAction = function (req, res) {
 	
 	// build log in event 
 	var loginEventEmitter = LoginEventEmitter.create(req, res);	
@@ -44,6 +44,6 @@ router.post('/', function (req, res) {
 			}
 		});
 	}
-});
+};
 
-module.exports = router;
+var authController = module.exports = exports = new AuthController();

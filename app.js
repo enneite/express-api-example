@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var engine = require('ejs-locals');
 var bootloader = require('express-bootloader');
 // locals modules :
-var initRoutes = require('./init/routes');
+var initRoutes = require('./routes/init-routes');
 
 var app = express();
 
