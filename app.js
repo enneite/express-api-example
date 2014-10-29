@@ -4,6 +4,10 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var nconf = require('nconf');
+
+nconf.file('auth', __dirname +  "/configs/auth.json");
+
 
 // new requirements for this application :
 var engine = require('ejs-locals');
@@ -27,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 initRoutes.init(app);
 

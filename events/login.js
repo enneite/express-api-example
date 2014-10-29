@@ -1,10 +1,12 @@
 var EventEmitter = require('events').EventEmitter
 var crypto = require('crypto');
-
+var nconf = require('nconf');
 var User = require('../models/user');
 var Token = require('../models/token');
 
-var AUTH_TIMEOUT = 100 ; //3600 * 24;
+var authConf = nconf.get('auth');
+var AUTH_TIMEOUT = authConf['token-timeout'] ; //3600 * 24;
+var AUTH_SALT = authConf['salt'];
 
 /**
  * private function : generate access_token
@@ -15,7 +17,7 @@ var createToken = function (username) {
 	var randomStr = '' + randomInt;
 	var timestamp = '' + new Date().getTime();
 	
-	var stringToHash = username + randomStr + timestamp ;
+	var stringToHash = username + randomStr + timestamp + AUTH_SALT ;
 	
 	var hash = crypto.createHash('sha512');
 	return  hash.update(stringToHash).digest('hex');
