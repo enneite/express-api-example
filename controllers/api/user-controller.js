@@ -27,7 +27,8 @@ UserController.prototype.listAction = function(req, res) {
  * @param res
  */
 UserController.prototype.readAction = function(req, res) {	
-	var id = req.params['id'];	
+	var id = req.params['id'];
+	
 	User.findById(id , function(err, found) {
 		if(err) {
 			console.log(err);

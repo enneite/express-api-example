@@ -1,11 +1,24 @@
-
+/**
+ * @deprecated (replaced by passport-http-bearer authentification)
+ */
 var User = require('../models/user');
 var Token = require('../models/token');
 
+
+/**
+ * @deprecated (replaced by passport-http-bearer authentification)
+ */
 var AuthMiddleware = function() {
 	
 }
 
+/**
+ * @deprecated (replaced by passport-http-bearer authentification)
+ * 
+ * @param req
+ * @param res
+ * @param next
+ */
 AuthMiddleware.prototype.authentification = function(req, res, next){
 	var token = null;
     var headers = req.headers;
