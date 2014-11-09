@@ -1,5 +1,7 @@
+var GiftIdea = require('../../models/gift-idea');
 var Wishlist = require('../../models/wishlist');
 var User = require('../../models/user');
+
 
 /**
  * wishlist controller
@@ -60,12 +62,12 @@ WishlistController.prototype.createUserWishlistAction = function (req, res) {
  * @param res
  */
 WishlistController.prototype.deleteUserWishlistAction = function (req, res) {
-	var id = req.params['id'];	
-	Wishlist.remove({_id : id}, function (err) {
+	var id = req.params['id'];
+	req.wishlist.remove(function(err) {
 		if(err) {
 			res.json(500, {error : errorMsg});
     	}
-		else {
+		else {			
 			res.json({status : 'ok', 'message' : 'wishlist succefully removed!'});
 		}
 	});
@@ -101,7 +103,24 @@ WishlistController.prototype.updateUserWishlistAction = function (req, res) {
  * @param res
  */
 WishlistController.prototype.readUserWishlistAction = function (req, res) {		
-	res.json(req.wishlist);	
+	console.log(req.wishlist._id);
+		
+	GiftIdea.find({wishlist : {_id : req.wishlist._id}})
+    .sort({createdDate : -1})
+    .exec(function(err, giftIdeas) {
+    	if(err) {
+    		console.log(err);
+    		res.json({'error' : 'an error occured!'});
+    	}
+    	else {    		
+    		var obj = req.wishlist.toObject({minimize: false});
+    		obj.items = [];
+    		if(null != giftIdeas) {
+    			obj.items = giftIdeas;
+    		}
+    		res.json(obj);
+    	}
+    });	
 };
 
 

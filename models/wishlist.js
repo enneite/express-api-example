@@ -22,17 +22,20 @@ wishlistSchema.statics.getStatusWaiting = function() {
 /**
  * removing gift idea associated with this wishlist
  */
-wishlistSchema.pre('remove', function(next) {
-    GiftIdea.remove({wishlist: {_id : this._id}}).exec(function(err) {
-    	if(err) {
-    		return next(err);
-    	}
-    	else {
-    		next();
-    	}
-    });
-    
+wishlistSchema.pre('remove', function (next) {
+	  console.log('remove wishlist in cascade', this._id);
+	  console.log('id', this._id);
+	  GiftIdea.remove({wishlist: {_id : this._id}}).exec(function (err) {
+		  if(err) {
+			  return next(err);
+		  }
+		  else {
+			  next();
+		  }
+	  });
+	  
 });
+
 
 
 module.exports = exports = mongoose.model('Wishlist', wishlistSchema);
