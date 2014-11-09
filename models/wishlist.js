@@ -25,7 +25,7 @@ wishlistSchema.statics.getStatusWaiting = function() {
 wishlistSchema.pre('remove', function(next) {
     GiftIdea.remove({wishlist: {_id : this._id}}).exec(function(err) {
     	if(err) {
-    		return done(err); 
+    		return next(err);
     	}
     	else {
     		next();
