@@ -3,7 +3,6 @@ var router = express.Router();
 
 var UserController = require('../../controllers/api/user-controller');
 
-var passport = require('passport');
 
 /**
  * get users list

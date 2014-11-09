@@ -1,5 +1,6 @@
 var index = require('./index');
 var users = require('./api/users');
+var account = require('./api/account');
 var auth = require('./api/auth');
 
 var passport = require('passport');
@@ -7,6 +8,8 @@ var BearerStrategy = require('passport-http-bearer').Strategy;
 
 var User = require('../models/user');
 var Token = require('../models/token');
+
+var AccountMiddleware = require('../middlewares/account-middleware');
 
 /**
  * Initialize the route of application
@@ -39,6 +42,8 @@ InitRoutes.prototype.passportInit = function() {
 	 		    });
 			  }
 			));
+	var authMdw = passport.authenticate('bearer', { session: false });
+	return authMdw;
 };
 
 /**
@@ -51,8 +56,9 @@ InitRoutes.prototype.init = function (app) {
 	/*
 	 * init passport Bearer use configuration
 	 */
-	this.passportInit();
-	var authMdw = passport.authenticate('bearer', { session: false });
+	var authMdw = this.passportInit();
+	
+	
 	/*
 	 * index routing
 	 */
@@ -62,15 +68,26 @@ InitRoutes.prototype.init = function (app) {
 	 * user routing
 	 */
     // middleware on users route : check authentification ...
-    app.use('/users', authMdw);
+    app.use('/api/users', authMdw);    
+    app.use('/api/users', users);
     
-    // routing users :
-    app.use('/users', users);
+    /*
+     * wishlist routing
+     */
+    // auth middleware
+    app.use('/api/account', authMdw); 
+    // acl middlewares :
+    app.use('/api/account/wishlists/:id', AccountMiddleware.wishlistUpdate);
+    
+    // the routing :
+    app.use('/api/account', account);
     
     /*
      * auth routing
      */
-    app.use('/auth', auth);
+    app.use('/api/auth', auth);
+    
+    
     
 }
 

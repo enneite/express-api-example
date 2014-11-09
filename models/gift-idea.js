@@ -16,4 +16,4 @@ var giftIdeaSchema = new Schema({
     urls : {type : Array}
 });
 
-module.exports = exports = mongoose.model('GiftIdea', wishlistSchema);
+module.exports = exports = mongoose.model('GiftIdea', giftIdeaSchema);
