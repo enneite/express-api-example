@@ -32,6 +32,12 @@ router.put('/wishlists/:id', WishlistController.updateUserWishlistAction);
 router.get('/wishlists/:id', WishlistController.readUserWishlistAction);
 
 
+/**
+ * update  wishlist status of connected user (by id)
+ */
+router.put('/wishlists-status/:id', WishlistController.changeStatusAction);
+
+
 /********** gift idea **********/
 
 router.post('/gift-idea/', GiftIdeaController.createGiftIdeaAction);

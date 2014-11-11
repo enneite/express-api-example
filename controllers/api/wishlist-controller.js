@@ -47,7 +47,7 @@ WishlistController.prototype.createUserWishlistAction = function (req, res) {
 	
 	wishlist.save(function (err, wishlist) {
 		if(err) {
-			res.json(500, {error : errorMsg});
+			res.json(500, {error : err.message});
     	}
 		else {
 			res.json(wishlist);
@@ -65,7 +65,7 @@ WishlistController.prototype.deleteUserWishlistAction = function (req, res) {
 	var id = req.params['id'];
 	req.wishlist.remove(function(err) {
 		if(err) {
-			res.json(500, {error : errorMsg});
+			res.json(500, {error : err.message});
     	}
 		else {			
 			res.json({status : 'ok', 'message' : 'wishlist succefully removed!'});
@@ -87,7 +87,7 @@ WishlistController.prototype.updateUserWishlistAction = function (req, res) {
 	
 	req.wishlist.save(function (err, wishlist) {
 		if(err) {
-			res.json(500, {error : errorMsg});
+			res.json(500, {error : err.message});
     	}
 		else {
 			res.json(req.wishlist);
@@ -121,6 +121,29 @@ WishlistController.prototype.readUserWishlistAction = function (req, res) {
     		res.json(obj);
     	}
     });	
+};
+
+
+/**
+ * change wishlist status
+ * 
+ * @param req
+ * @param res
+ */
+WishlistController.prototype.changeStatusAction = function (req, res) {
+	
+	// new values for wishlist :
+	req.wishlist.status = req.body.status;
+	
+	req.wishlist.save(function (err, wishlist) {
+		if(err) {
+			res.json(500, {error : err.message});
+    	}
+		else {
+			res.json(req.wishlist);
+		}
+	}); 
+	
 };
 
 

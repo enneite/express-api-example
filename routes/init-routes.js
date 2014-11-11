@@ -77,6 +77,7 @@ InitRoutes.prototype.init = function (app) {
     // auth middleware
     app.use('/api/account', authMdw); 
     // acl middlewares :
+    app.use('/api/account/wishlists-status/:id', AccountMiddleware.wishlistMdw);
     app.use('/api/account/wishlists/:id', AccountMiddleware.wishlistMdw);
     app.use('/api/account/gift-idea/', AccountMiddleware.wishlistGiftIdeaMdw);
     app.use('/api/account/gift-idea/:id', AccountMiddleware.giftIdeaMdw);

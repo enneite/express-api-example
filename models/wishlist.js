@@ -4,6 +4,13 @@ var mongoose = require('mongoose')
 
 var GiftIdea = require('./gift-idea');
 
+
+
+var statusValidator = function(status) {
+	return (["WAITING", "PUBLIC", "REMOVED"].indexOf(status) > -1);
+}
+
+
 var wishlistSchema = new Schema({
 	author : {
 		type: Schema.Types.ObjectId,
@@ -11,7 +18,7 @@ var wishlistSchema = new Schema({
 	},
 	createdDate: {type: Date, default: Date.now},
     title: {type: String, required: true},    
-    status: {type: String, default:'WAITING'},
+    status: {type: String, default:'WAITING', validate : statusValidator},
     dueDate: {type: Date, required:false}
 });
 
