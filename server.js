@@ -1,3 +1,5 @@
+global.APPLICATION_ENV = (process.argv.indexOf('development') >-1) ? 'development' : 'production';
+console.log('\n ====== APPLICATION ENV : ', global.APPLICATION_ENV, ' ====== \n');
 var debug = require('debug')('application');
 var app = require('./app');
 

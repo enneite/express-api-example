@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nconf = require('nconf');
 
-nconf.file('auth', __dirname +  "/configs/auth.json");
+nconf.file('auth', __dirname +  "/configs/" + global.APPLICATION_ENV + "/auth.json");
 
 
 // new requirements for this application :
@@ -21,7 +21,7 @@ var app = express();
 // use ejs-locals for all ejs templates : it's better to integrate layout in template architecture
 app.engine('ejs', engine);
 
-bootloader.init(app, __dirname);
+bootloader.init(app, __dirname, "/configs/" + global.APPLICATION_ENV + "/bootloader.json");
 
 
 

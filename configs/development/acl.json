@@ -1,0 +1,9 @@
+{
+	"roles" : ["admin"],
+	
+	"resources" : ["crud_user"],	
+
+	"acl" : {
+		"admin" : ["crud_user"]
+	}
+}
