@@ -11,6 +11,8 @@ var Token = require('../models/token');
 
 var AccountMiddleware = require('../middlewares/account-middleware');
 
+var ResourceMiddleware = require('../middlewares/resource-middleware');
+
 /**
  * Initialize the route of application
  */
@@ -68,7 +70,9 @@ InitRoutes.prototype.init = function (app) {
 	 * user routing
 	 */
     // middleware on users route : check authentification ...
-    app.use('/api/users', authMdw);    
+    app.use('/api/users', authMdw);
+    // only admin user can use crud API to manage users :
+    app.use('/api/users', ResourceMiddleware.manageUserMdw);
     app.use('/api/users', users);
     
     /*
